@@ -120,6 +120,40 @@ router.put("/:id/status", verifyToken, isAdmin, async (req, res) => {
   }
 });
 
+router.put("/:id/admin-update", verifyToken, isAdmin, async (req, res) => {
+  try {
+    const { status, adminRemarks } = req.body;
+
+    const validStatuses = ["Pending", "In Progress", "Resolved"];
+    if (status && !validStatuses.includes(status)) {
+      return res.status(400).json({ message: "Invalid status" });
+    }
+
+    const updateData = {};
+    if (status) updateData.status = status;
+    if (adminRemarks !== undefined) updateData.adminRemarks = adminRemarks;
+
+    const updatedComplaint = await Complaint.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true }
+    );
+
+    if (!updatedComplaint)
+      return res.status(404).json({ message: "Complaint not found" });
+
+    res.status(200).json({
+      message: "Complaint updated successfully",
+      complaint: updatedComplaint,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Error updating complaint",
+      error: err.message,
+    });
+  }
+});
+
 
 router.delete("/:id", verifyToken, isAdmin, async (req, res) => {
   try {

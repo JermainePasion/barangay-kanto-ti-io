@@ -10,6 +10,7 @@ const ComplaintSchema = new mongoose.Schema(
     imageUrl: { type: String, default: "" }, 
     status: { type: String, default: "Pending" },
     location: String,
+    adminRemarks: { type: String, default: "" },
   },
   { timestamps: true }
 );
