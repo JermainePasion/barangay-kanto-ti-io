@@ -78,6 +78,9 @@ const ComplaintCard = ({ complaint, onDelete }) => {
             <h2 className="text-base font-medium text-gray-700">
               {complaint.user?.name || "Anonymous"}
             </h2>
+
+            
+            
             <p className="text-sm font-semibold text-red-600 mt-1">{complaint.category}</p>
             <p className="text-sm text-gray-500 mt-2">{complaint.description}</p>
           </div>

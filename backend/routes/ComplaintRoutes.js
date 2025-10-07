@@ -133,7 +133,7 @@ router.get("/:id", async (req, res) => {
 
 router.put("/:id/status", verifyToken, isAdmin, async (req, res) => {
   try {
-    const { status, remarks } = req.body;
+    const { status, adminRemarks } = req.body;
 
     if (!["Pending", "In Progress", "Resolved"].includes(status)) {
       return res.status(400).json({ message: "Invalid status" });
@@ -141,7 +141,7 @@ router.put("/:id/status", verifyToken, isAdmin, async (req, res) => {
 
     const updatedComplaint = await Complaint.findByIdAndUpdate(
       req.params.id,
-      { status, adminRemarks: remarks }, // ✅ include remarks field
+      { status, adminRemarks }, // ✅ include remarks field
       { new: true }
     );
 

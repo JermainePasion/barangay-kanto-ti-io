@@ -34,10 +34,10 @@ function AdminDashboardScreen() {
       const token = localStorage.getItem("token");
       const complaint = complaints.find((c) => c._id === id);
       const res = await axios.put(
-        `http://localhost:5000/api/complaints/${id}/status`,
+        `http://localhost:5000/api/complaints/${id}/admin-update`,
         {
           status: complaint.status,
-          remarks: complaint.adminRemarks || "",
+          adminRemarks: complaint.adminRemarks || "",
         },
         { headers: { Authorization: `Bearer ${token}` } }
       );
