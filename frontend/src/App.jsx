@@ -9,6 +9,7 @@ import MyComplaintsScreen from "./screens/complaints/MyComplaintsScreen";
 import FileComplaintScreen from "./screens/complaints/FileComplaintScreen";
 import AdminDashboardScreen from "./screens/AdminDashboardScreen";
 import ComplaintsList from "./screens/complaints/ComplaintsList";
+import AboutUs from "./screens/AboutUs";
 
 
 // Protect route for logged-in users
@@ -32,6 +33,7 @@ const App = () => {
         <Route path="/register" element={<RegisterScreen />} />
         <Route path="/complaints/:id" element={<ComplaintScreen />} />
         <Route path="/complaints" element={<ComplaintsList />} />
+        <Route path="/about" element={<AboutUs />} />
 
         <Route
           path="/filecomplaint"

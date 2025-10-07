@@ -1,7 +1,12 @@
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 function ConstructionSVG() {
-  // Expanded list of cogs
+  const [hovered, setHovered] = useState(false);
+  const navigate = useNavigate();
+
+  // List of cogs
   const cogs = [
     { size: 80, x: "-10%", y: "20%", rotate: 360, duration: 30 },
     { size: 60, x: "5%", y: "10%", rotate: -360, duration: 40 },
@@ -41,12 +46,15 @@ function ConstructionSVG() {
         />
       ))}
 
-      {/* Foreground SVG */}
-      <svg
-        className="relative w-64 mx-auto z-10"
+      {/* Clickable SVG */}
+      <motion.svg
+        className="relative w-64 mx-auto z-10 cursor-pointer"
         height="300"
         viewBox="0 0 250 300"
         width="250"
+        onHoverStart={() => setHovered(true)}
+        onHoverEnd={() => setHovered(false)}
+        onClick={() => navigate("/about")}
       >
         <defs>
           <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
@@ -59,14 +67,48 @@ function ConstructionSVG() {
             />
           </filter>
         </defs>
+
+        {/* Outer Shape */}
         <path
           d="M125 0C55.96 0 0 55.96 0 125c0 36.32 15.42 69.04 40.18 92.17L125 300l84.82-82.83C234.58 194.04 250 161.32 250 125 250 55.96 194.04 0 125 0z"
           fill="#FA812F"
           filter="url(#shadow)"
         />
-        <circle cx="125" cy="125" r="70" fill="#FFFFFF" fillOpacity="0.3" />
+
+        {/* Inner Circle with Glow on Hover */}
+        <motion.circle
+          cx="125"
+          cy="125"
+          r="70"
+          fill="#FFFFFF"
+          fillOpacity="0.3"
+          animate={{
+            stroke: hovered ? "#FAB12F" : "#FFFFFF",
+            strokeWidth: hovered ? 6 : 0,
+            filter: hovered ? "url(#shadow)" : "none",
+          }}
+          transition={{ duration: 0.3 }}
+        />
+
+        {/* House/Logo */}
         <path d="M125 80l-40 30h15v35h50v-35h15l-40-30z" fill="#FFFFFF" />
-      </svg>
+      </motion.svg>
+
+      {/* Learn More Banner */}
+      <AnimatePresence>
+        {hovered && (
+          <motion.div
+            className="absolute top-[80%] w-4/5 mx-auto bg-[#FAB12F] text-white rounded-xl py-3 px-6 text-center font-semibold shadow-lg cursor-pointer z-20"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.3 }}
+            onClick={() => navigate("/about")}
+          >
+            Learn more about us!
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
