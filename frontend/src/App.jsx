@@ -38,7 +38,7 @@ const App = () => {
           }
         />
         <Route
-          path="/filecomplaint"
+          path="/mycomplaints"
           element={
             <ProtectedRoute>
               <MyComplaintsScreen />

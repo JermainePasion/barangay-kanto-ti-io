@@ -1,8 +1,11 @@
 import React from 'react'
+import DashboardLayout from '../../layouts/DashboardLayout'
 
 function FileComplaintScreen() {
   return (
-    <div>FileComplaintScreen</div>
+    <DashboardLayout>
+        <div>FileComplaintScreen</div>
+    </DashboardLayout>
   )
 }
 

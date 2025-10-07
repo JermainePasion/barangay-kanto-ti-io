@@ -6,7 +6,7 @@ function HomeScreen() {
     <div>
         <DashboardLayout>
             <h1>
-                hello world
+                HomeScreen
             </h1>
         </DashboardLayout>
     </div>

@@ -1,8 +1,11 @@
 import React from 'react'
+import DashboardLayout from '../../layouts/DashboardLayout'
 
 function ComplaintScreen() {
   return (
-    <div>ComplaintScreen</div>
+    <DashboardLayout>
+        <div>ComplaintScreen</div>
+    </DashboardLayout>
   )
 }
 

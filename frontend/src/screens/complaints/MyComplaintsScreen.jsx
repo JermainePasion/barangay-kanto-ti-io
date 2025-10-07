@@ -1,9 +1,12 @@
 import React from 'react'
+import DashboardLayout from '../../layouts/DashboardLayout'
 
-function MyComplaints() {
+function MyComplaintsScreen() {
   return (
-    <div>MyComplaints</div>
+    <DashboardLayout>
+        <div>MyComplaintsScreen</div>
+    </DashboardLayout>
   )
 }
 
-export default MyComplaints
+export default MyComplaintsScreen
