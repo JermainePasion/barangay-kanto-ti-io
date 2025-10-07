@@ -25,9 +25,9 @@ const Navbar = () => {
     <header className="bg-white shadow-md h-20 md:h-24 flex items-center justify-between px-4 lg:px-8">
       <Link to="/" className="flex items-center gap-2">
         <img
-          src="https://i.ibb.co/W6ZXdqN/2021-10-26-16h20-21.png"
+          src="logo.png"
           alt="Logo"
-          className="h-12"
+          className="h-12 sm:h-14 md:h-18 lg:h-20 object-contain"
         />
       </Link>
 
