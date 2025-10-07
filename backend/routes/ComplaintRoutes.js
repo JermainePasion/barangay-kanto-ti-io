@@ -90,6 +90,28 @@ router.get("/top-liked", async (req, res) => {
   }
 });
 
+router.get("/my-complaints", verifyToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const userComplaints = await Complaint.find({ user: userId })
+      .populate("user", "name email role")
+      .sort({ createdAt: -1 });
+
+    if (!userComplaints || userComplaints.length === 0) {
+      return res.status(200).json({ message: "You have no complaints yet", complaints: [] });
+    }
+
+    res.status(200).json(userComplaints);
+  } catch (err) {
+    console.error("Error fetching user's complaints:", err);
+    res.status(500).json({
+      message: "Failed to fetch user complaints",
+      error: err.message,
+    });
+  }
+});
+
 router.get("/:id", async (req, res) => {
   try {
     const complaint = await Complaint.findById(req.params.id).populate(
@@ -228,6 +250,7 @@ router.put("/:id/unlike", verifyToken, async (req, res) => {
     res.status(500).json({ message: "Error unliking complaint", error: err.message });
   }
 });
+
 
 
 
