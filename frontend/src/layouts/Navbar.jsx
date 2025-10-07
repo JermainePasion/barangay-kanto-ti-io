@@ -1,13 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleAuth = () => {
+    if (isLoggedIn) {
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    } else {
+      window.location.href = "/login";
+    }
   };
 
   return (
@@ -20,14 +31,14 @@ const Navbar = () => {
         />
       </Link>
 
-      {/* Desktop Nav */}
+
       <nav className="hidden md:flex items-center space-x-6 lg:space-x-8 font-semibold text-base lg:text-lg">
         <Link to="/" className="relative group text-gray-700 hover:text-secondary">
           <span>Home</span>
           <span className="absolute left-0 -bottom-1 w-0 h-1 bg-primary transition-all duration-300 group-hover:w-full"></span>
         </Link>
 
-        <Link to="/complaint" className="relative group text-gray-700 hover:text-secondary">
+        <Link to="/complaints" className="relative group text-gray-700 hover:text-secondary">
           <span>Complaints</span>
           <span className="absolute left-0 -bottom-1 w-0 h-1 bg-primary transition-all duration-300 group-hover:w-full"></span>
         </Link>
@@ -48,15 +59,16 @@ const Navbar = () => {
         </Link>
       </nav>
 
- 
+
       <div className="hidden md:flex items-center gap-4">
         <button
-          onClick={handleLogout}
-          className="bg-accent hover:bg-primary text-white font-semibold px-5 py-2 rounded-xl shadow-md transition-colors duration-200 ease-in-out"
+          onClick={handleAuth}
+          className="bg-[#DD0300] hover:bg-[#FAB12F] text-white font-semibold px-5 py-2 rounded-xl shadow-md transition-colors duration-200 ease-in-out"
         >
-          Log out
+          {isLoggedIn ? "Log out" : "Log in"}
         </button>
       </div>
+
 
       <button
         onClick={toggleMenu}
@@ -87,21 +99,20 @@ const Navbar = () => {
         </svg>
       </button>
 
-
       {menuOpen && (
         <div className="absolute top-20 left-0 w-full bg-[#FEF3E2] border-t border-gray-200 shadow-md md:hidden z-50">
           <nav className="flex flex-col text-center py-4 space-y-3 font-medium">
             <Link to="/" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-secondary transition">Home</Link>
-            <Link to="/complaint" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-secondary transition">Complaints</Link>
+            <Link to="/complaints" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-secondary transition">Complaints</Link>
             <Link to="/filecomplaint" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-secondary transition">File Complaint</Link>
             <Link to="/mycomplaints" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-secondary transition">My Complaints</Link>
             <Link to="/admin" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-secondary transition">Admin</Link>
 
             <button
-              onClick={handleLogout}
-              className="bg-accent hover:bg-primary text-white font-semibold px-5 py-2 rounded-xl mx-auto mt-2 w-1/2 transition-colors duration-200 ease-in-out"
+              onClick={handleAuth}
+              className="bg-[#DD0300] hover:bg-[#FAB12F] text-white font-semibold px-5 py-2 rounded-xl mx-auto mt-2 w-1/2 transition-colors duration-200 ease-in-out"
             >
-              Log out
+              {isLoggedIn ? "Log out" : "Log in"}
             </button>
           </nav>
         </div>

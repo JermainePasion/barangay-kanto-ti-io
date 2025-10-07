@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import DashboardLayout from "../../layouts/DashboardLayout";
+import ComplaintCard from "../../components/ComplaintCard";
 import axios from "axios";
-import DashboardLayout from "../layouts/DashboardLayout";
-import ComplaintCard from "../components/ComplaintCard";
+import { Link } from "react-router-dom";
 
-function HomeScreen() {
+const ComplaintsList = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchTopComplaints = async () => {
+    const fetchComplaints = async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:5000/api/complaints/top-liked"
+        const { data } = await axios.get("http://localhost:5000/api/complaints/");
+        // Sort by most recent
+        const sorted = data.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-        setComplaints(data);
+        setComplaints(sorted);
       } catch (err) {
         setError("Failed to fetch complaints");
         console.error(err);
@@ -24,29 +26,27 @@ function HomeScreen() {
       }
     };
 
-    fetchTopComplaints();
+    fetchComplaints();
   }, []);
 
   return (
     <DashboardLayout>
       <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">Most Liked Complaints</h1>
+        <h1 className="text-2xl font-bold mb-4">Recent Complaints</h1>
 
         {loading && <p>Loading complaints...</p>}
         {error && <p className="text-red-500">{error}</p>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {complaints.map((complaint) => (
-            <ComplaintCard
-              key={complaint._id}
-              complaint={complaint}
-              setComplaints={setComplaints} // pass setter to update likes
-            />
+            <Link to={`/complaints/${complaint._id}`} key={complaint._id}>
+              <ComplaintCard complaint={complaint} />
+            </Link>
           ))}
         </div>
       </div>
     </DashboardLayout>
   );
-}
+};
 
-export default HomeScreen;
+export default ComplaintsList;

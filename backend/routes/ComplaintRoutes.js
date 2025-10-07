@@ -71,6 +71,24 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/top-liked", async (req, res) => {
+  try {
+    const topComplaints = await Complaint.aggregate([
+      {
+        $addFields: { likesCount: { $size: { $ifNull: ["$likes", []] } } }
+      },
+      { $sort: { likesCount: -1, createdAt: -1 } }, // most liked first
+      { $limit: 10 }
+    ]);
+
+    // Populate user manually after aggregation
+    const populated = await Complaint.populate(topComplaints, { path: "user", select: "name email" });
+
+    res.status(200).json(populated);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch top complaints", error: err.message });
+  }
+});
 
 router.get("/:id", async (req, res) => {
   try {
@@ -155,6 +173,7 @@ router.put("/:id/admin-update", verifyToken, isAdmin, async (req, res) => {
 });
 
 
+
 router.delete("/:id", verifyToken, isAdmin, async (req, res) => {
   try {
     const deletedComplaint = await Complaint.findByIdAndDelete(req.params.id);
@@ -169,5 +188,48 @@ router.delete("/:id", verifyToken, isAdmin, async (req, res) => {
     });
   }
 });
+
+router.put("/:id/like", verifyToken, async (req, res) => {
+  try {
+    const complaint = await Complaint.findById(req.params.id);
+    if (!complaint) return res.status(404).json({ message: "Complaint not found" });
+
+    const userId = req.user.id;
+
+    if (complaint.likes.includes(userId)) {
+      return res.status(400).json({ message: "You already liked this complaint" });
+    }
+
+    complaint.likes.push(userId);
+    await complaint.save();
+
+    res.status(200).json({ message: "Liked successfully", likes: complaint.likes.length });
+  } catch (err) {
+    res.status(500).json({ message: "Error liking complaint", error: err.message });
+  }
+});
+
+router.put("/:id/unlike", verifyToken, async (req, res) => {
+  try {
+    const complaint = await Complaint.findById(req.params.id);
+    if (!complaint) return res.status(404).json({ message: "Complaint not found" });
+
+    const userId = req.user.id;
+
+    if (!complaint.likes.includes(userId)) {
+      return res.status(400).json({ message: "You haven't liked this complaint yet" });
+    }
+
+    complaint.likes.pull(userId);
+    await complaint.save();
+
+    res.status(200).json({ message: "Unliked successfully", likes: complaint.likes.length });
+  } catch (err) {
+    res.status(500).json({ message: "Error unliking complaint", error: err.message });
+  }
+});
+
+
+
 
 module.exports = router;

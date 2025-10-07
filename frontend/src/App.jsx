@@ -6,6 +6,7 @@ import ComplaintScreen from "./screens/complaints/ComplaintScreen";
 import MyComplaintsScreen from "./screens/complaints/MyComplaintsScreen";
 import FileComplaintScreen from "./screens/complaints/FileComplaintScreen";
 import AdminDashboardScreen from "./screens/AdminDashboardScreen";
+import ComplaintsList from "./screens/complaints/ComplaintsList";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token"); // Assuming JWT stored in localStorage
@@ -20,15 +21,9 @@ const App = () => {
         <Route path="/" element={<HomeScreen />} />
         <Route path="/login" element={<LoginScreen />} />
         <Route path="/register" element={<RegisterScreen />} />
+        <Route path="/complaints/:id" element={<ComplaintScreen />} />
+        <Route path="/complaints" element={<ComplaintsList/>} />
 
-        <Route
-          path="/complaint"
-          element={
-            <ProtectedRoute>
-              <ComplaintScreen />
-            </ProtectedRoute>
-          }
-        />
         <Route
           path="/filecomplaint"
           element={
