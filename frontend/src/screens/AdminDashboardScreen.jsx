@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import DashboardLayout from "../layouts/DashboardLayout";
 import MessageBanner from "../components/MessageBanner"; // make sure the path is correct
+import ComplaintStats from "../components/ComplaintStats";
 
 function AdminDashboardScreen() {
   const [complaints, setComplaints] = useState([]);
@@ -90,14 +91,19 @@ function AdminDashboardScreen() {
 
   return (
     <DashboardLayout>
+      
       <MessageBanner
         type={banner.type}
         message={banner.message}
         onClose={() => setBanner({ type: "", message: "" })}
       />
 
+      
+
       <div className="p-6 bg-[#FEF3E2] min-h-screen">
-        <div className="mb-3">
+         <ComplaintStats complaints={complaints}/>
+
+        <div className="mb-3 mt-10">
           <input
             type="text"
             className="border rounded px-3 py-2 w-full"
