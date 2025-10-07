@@ -133,7 +133,7 @@ router.get("/:id", async (req, res) => {
 
 router.put("/:id/status", verifyToken, isAdmin, async (req, res) => {
   try {
-    const { status } = req.body;
+    const { status, remarks } = req.body;
 
     if (!["Pending", "In Progress", "Resolved"].includes(status)) {
       return res.status(400).json({ message: "Invalid status" });
@@ -141,7 +141,7 @@ router.put("/:id/status", verifyToken, isAdmin, async (req, res) => {
 
     const updatedComplaint = await Complaint.findByIdAndUpdate(
       req.params.id,
-      { status },
+      { status, adminRemarks: remarks }, // ✅ include remarks field
       { new: true }
     );
 
@@ -149,8 +149,8 @@ router.put("/:id/status", verifyToken, isAdmin, async (req, res) => {
       return res.status(404).json({ message: "Complaint not found" });
 
     res.status(200).json({
-      message: "Complaint status updated",
-      complaint: updatedComplaint,
+      message: "Complaint updated successfully",
+      updatedComplaint, // ✅ consistent key
     });
   } catch (err) {
     res.status(500).json({
