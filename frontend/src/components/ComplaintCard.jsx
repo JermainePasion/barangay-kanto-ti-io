@@ -12,8 +12,9 @@ const ComplaintCard = ({ complaint }) => {
   return (
     <div
       onClick={() => navigate(`/complaints/${complaint._id}`)}
-      className="bg-orange-50 rounded-2xl shadow-md overflow-hidden w-full max-w-sm cursor-pointer hover:shadow-xl hover:scale-[1.02] transition-transform duration-200"
+      className="flex flex-col justify-between bg-orange-50 rounded-2xl shadow-md overflow-hidden cursor-pointer hover:shadow-lg hover:scale-[1.02] transition-transform duration-200 h-full"
     >
+      {/* Image */}
       {complaint.imageUrl ? (
         <img
           src={complaint.imageUrl}
@@ -38,24 +39,33 @@ const ComplaintCard = ({ complaint }) => {
           </svg>
         </div>
       )}
-      <div className="p-4">
-        <h2 className="text-base font-medium text-gray-700">
-          {complaint.user?.name || "Anonymous"}
-        </h2>
-        <p className="text-sm font-semibold text-red-600 mt-1">
-          {complaint.category}
-        </p>
-        <p className="text-sm text-gray-500 mt-2 line-clamp-2">
-          {complaint.description}
-        </p>
-        <p className="text-xs text-gray-400 mt-1">
-          {formatDistanceToNow(new Date(complaint.createdAt), {
-            addSuffix: true,
-          })}
-        </p>
+
+      {/* Content */}
+      <div className="flex flex-col flex-grow justify-between p-4">
+        <div>
+          <h2 className="text-base font-medium text-gray-700">
+            {complaint.user?.name || "Anonymous"}
+          </h2>
+          <p className="text-sm font-semibold text-red-600 mt-1">
+            {complaint.category}
+          </p>
+          <p className="text-sm text-gray-500 mt-2 line-clamp-2">
+            {complaint.description}
+          </p>
+        </div>
+
+        <div className="mt-4">
+          <p className="text-xs text-gray-400">
+            {formatDistanceToNow(new Date(complaint.createdAt), {
+              addSuffix: true,
+            })}
+          </p>
+        </div>
+
+        {/* Footer */}
         <div
           className="mt-4 flex items-center justify-between bg-orange-100 rounded-lg px-3 py-2"
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()} // prevent navigation on like click
         >
           <LikeButton
             complaintId={complaint._id}
