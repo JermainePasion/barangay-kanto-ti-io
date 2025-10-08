@@ -1,21 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import LikeButton from "./LikeButton";
 import MessageBanner from "./MessageBanner";
 import axios from "axios";
+import { UserContext } from "../context/UserContext";
 
 const ComplaintCard = ({ complaint, onDelete }) => {
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [loadingDelete, setLoadingDelete] = useState(false);
 
-  const userId = localStorage.getItem("userId");
+  const { user } = useContext(UserContext); 
+  const userId = user?._id;
   const userLiked = complaint.likes?.some((id) => id.toString() === userId);
-  const isOwner = complaint.user?._id === userId;
+  const isOwner = userId && complaint.user?._id === userId; 
 
   const handleDelete = async (e) => {
-    e.stopPropagation(); // prevent card navigation
+    e.stopPropagation(); 
     if (!window.confirm("Are you sure you want to delete this complaint?")) return;
 
     try {
@@ -25,7 +27,7 @@ const ComplaintCard = ({ complaint, onDelete }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMessage("Complaint deleted successfully!");
-      onDelete?.(complaint._id); // notify parent to remove from state
+      onDelete?.(complaint._id); 
     } catch (err) {
       console.error("Error deleting complaint:", err);
       setMessage("Failed to delete complaint!");
@@ -46,7 +48,7 @@ const ComplaintCard = ({ complaint, onDelete }) => {
         onClick={() => navigate(`/complaints/${complaint._id}`)}
         className="flex flex-col justify-between bg-orange-50 rounded-2xl shadow-md overflow-hidden cursor-pointer hover:shadow-lg hover:scale-[1.02] transition-transform duration-200 h-full"
       >
-        {/* Image */}
+
         {complaint.imageUrl ? (
           <img
             src={complaint.imageUrl}
@@ -72,15 +74,11 @@ const ComplaintCard = ({ complaint, onDelete }) => {
           </div>
         )}
 
-        {/* Content */}
         <div className="flex flex-col flex-grow justify-between p-4">
           <div>
             <h2 className="text-base font-medium text-gray-700">
               {complaint.user?.name || "Anonymous"}
             </h2>
-
-            
-            
             <p className="text-sm font-semibold text-red-600 mt-1">{complaint.category}</p>
             <p className="text-sm text-gray-500 mt-2">{complaint.description}</p>
           </div>
@@ -91,7 +89,6 @@ const ComplaintCard = ({ complaint, onDelete }) => {
             </p>
           </div>
 
-          {/* Footer */}
           <div
             className="mt-4 flex items-center justify-between bg-orange-100 rounded-lg px-3 py-2"
             onClick={(e) => e.stopPropagation()} // prevent navigation on footer clicks
