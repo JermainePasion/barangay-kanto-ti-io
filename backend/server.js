@@ -11,11 +11,11 @@ const app = express();
 
 
 app.use(cors({
-  origin: "*",
-  credentials: true, 
+  origin: "https://barangay-kanto-tino.vercel.app", 
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
 }));
-app.use(express.json()); 
-
+app.use(express.json())
 
 app.use("/api/complaints", ComplaintRoutes);
 app.use("/api/users", userRoutes);
