@@ -15,7 +15,7 @@ const ComplaintScreen = () => {
   useEffect(() => {
     const fetchComplaint = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/complaints/${id}`);
+        const { data } = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/complaints/${id}`);
         setComplaint(data);
       } catch {
         setError("Failed to fetch complaint details");

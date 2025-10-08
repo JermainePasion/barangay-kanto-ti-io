@@ -17,7 +17,7 @@ function AdminDashboardScreen() {
     const fetchComplaints = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5000/api/complaints", {
+        const res = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/complaints`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setComplaints(Array.isArray(res.data) ? res.data : []);
@@ -36,7 +36,7 @@ function AdminDashboardScreen() {
       const token = localStorage.getItem("token");
       const complaint = complaints.find((c) => c._id === id);
       const res = await axios.put(
-        `http://localhost:5000/api/complaints/${id}/admin-update`,
+        `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/complaints/${id}/admin-update`,
         {
           status: complaint.status,
           adminRemarks: complaint.adminRemarks || "",
@@ -61,7 +61,7 @@ function AdminDashboardScreen() {
       return;
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5000/api/complaints/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/complaints/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setComplaints((prev) => prev.filter((c) => c._id !== id));

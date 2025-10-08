@@ -12,7 +12,7 @@ function MyComplaintsScreen() {
     const fetchComplaints = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:5000/api/complaints/my-complaints",
+          `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/complaints/my-complaints`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

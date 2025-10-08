@@ -16,8 +16,8 @@ const LikeButton = ({ complaintId, initialLikes = 0, initialLiked = false }) => 
       }
 
       const endpoint = liked
-        ? `http://localhost:5000/api/complaints/${complaintId}/unlike`
-        : `http://localhost:5000/api/complaints/${complaintId}/like`;
+        ? `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/complaints/${complaintId}/unlike`
+        : `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/complaints/${complaintId}/like`;
 
       await axios.put(
         endpoint,

@@ -12,7 +12,7 @@ export const UserProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     if (token) {
       axios
-        .get("http://localhost:5000/api/users/me", {
+        .get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/users/me`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => setUser(res.data))

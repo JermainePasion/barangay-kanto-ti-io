@@ -13,7 +13,7 @@ function HomeScreen() {
     const fetchTopComplaints = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:5000/api/complaints/top-liked"
+          `${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/complaints/top-liked`
         );
         setComplaints(data);
       } catch (err) {

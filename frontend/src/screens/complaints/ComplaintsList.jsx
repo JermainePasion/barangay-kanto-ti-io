@@ -12,7 +12,7 @@ const ComplaintsList = () => {
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/api/complaints/");
+        const { data } = await axios.get(`${import.meta.env.VITE_REACT_APP_BACKEND_BASEURL}/api/complaints/`);
         // Sort by most recent
         const sorted = data.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
