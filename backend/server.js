@@ -9,32 +9,35 @@ dotenv.config();
 
 const app = express();
 
-// List of allowed frontend URLs (add more if needed)
+// Allowed frontends
 const allowedOrigins = [
   "https://barangay-kanto-tino.vercel.app",
   "https://barangay-kanto-tino-goeln8iby-jermaine-pasions-projects.vercel.app"
 ];
 
-app.use(cors({
-  origin: function(origin, callback) {
+// CORS middleware (apply BEFORE routes)
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET,POST,PUT,DELETE,OPTIONS"
+    );
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization"
+    );
+  }
+  // Handle preflight requests
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  optionsSuccessStatus: 200
-}));
-
-
-app.options("*", cors());
-
-
+// Body parser
 app.use(express.json());
 
 // Routes
@@ -45,12 +48,9 @@ app.get("/", (req, res) => {
   res.send("BIICS Backend Running...");
 });
 
-
+// MongoDB
 mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.error("MongoDB Connection Error:", err));
 
