@@ -3,6 +3,8 @@ import axios from "axios";
 import DashboardLayout from "../layouts/DashboardLayout";
 import MessageBanner from "../components/MessageBanner"; // make sure the path is correct
 import ComplaintStats from "../components/ComplaintStats";
+import DashboardCharts from "../components/DashboardCharts";
+
 
 function AdminDashboardScreen() {
   const [complaints, setComplaints] = useState([]);
@@ -99,6 +101,7 @@ function AdminDashboardScreen() {
       />
 
       
+  
 
       <div className="p-6 bg-[#FEF3E2] min-h-screen">
          <ComplaintStats complaints={complaints}/>
@@ -247,7 +250,11 @@ function AdminDashboardScreen() {
             </div>
           </div>
         )}
+        <div className="mt-10 w-full">
+          <DashboardCharts />
+        </div>
       </div>
+      
     </DashboardLayout>
   );
 }
