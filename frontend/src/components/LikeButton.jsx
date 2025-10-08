@@ -11,7 +11,7 @@ const LikeButton = ({ complaintId, initialLikes = 0, initialLiked = false }) => 
       const userId = localStorage.getItem("userId");
 
       if (!token || !userId) {
-        alert("Please log in first");
+        alert("Please log in first!");
         return;
       }
 
