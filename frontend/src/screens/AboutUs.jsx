@@ -12,7 +12,7 @@ const teamMembers = [
     },
   },
   {
-    name: "Musashi Gucci Esquivel",
+    name: "Musashi Esquivel",
     role: "UI/UX",
     image: "musashi.jpg",
     socials: {
